@@ -238,5 +238,17 @@ const api = {
         const endpoint = queryParams ? `/dashboard?${queryParams}` : '/dashboard';
         return apiRequest(endpoint);
     },
+
+    // Users
+    async getUserProfile() {
+        return apiRequest('/users/profile');
+    },
+
+    async updateUserProfile(profileData) {
+        return apiRequest('/users/profile', {
+            method: 'PUT',
+            body: JSON.stringify(profileData),
+        });
+    },
 };
 

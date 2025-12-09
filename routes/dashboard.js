@@ -107,6 +107,38 @@ router.get('/', async (req, res) => {
       [userId]
     );
 
+    // Get income vs expense over time (last 6 months)
+    const sixMonthsAgo = new Date(currentYear, currentMonth - 6, 1);
+    const incomeVsExpenseOverTimeResult = await pool.query(
+      `SELECT 
+        DATE_TRUNC('month', transaction_date) as month,
+        transaction_type,
+        SUM(amount) as total
+      FROM transactions
+      WHERE user_id = $1
+        AND transaction_date >= $2
+      GROUP BY DATE_TRUNC('month', transaction_date), transaction_type
+      ORDER BY month ASC`,
+      [userId, sixMonthsAgo]
+    );
+
+    // Process income vs expense over time data
+    const incomeVsExpenseOverTime = {};
+    incomeVsExpenseOverTimeResult.rows.forEach(row => {
+      const monthKey = new Date(row.month).toISOString().split('T')[0].substring(0, 7); // YYYY-MM
+      if (!incomeVsExpenseOverTime[monthKey]) {
+        incomeVsExpenseOverTime[monthKey] = { month: monthKey, income: 0, expense: 0 };
+      }
+      if (row.transaction_type === 'Income') {
+        incomeVsExpenseOverTime[monthKey].income = parseFloat(row.total || 0);
+      } else {
+        incomeVsExpenseOverTime[monthKey].expense = parseFloat(row.total || 0);
+      }
+    });
+
+    // Convert to array and sort by month
+    const incomeVsExpenseData = Object.values(incomeVsExpenseOverTime).sort((a, b) => a.month.localeCompare(b.month));
+
     // Calculate net worth (simplified: total balance of all accounts)
     // In a real app, you'd also include investments, property, debts, etc.
     const netWorth = totalBalance;
@@ -126,6 +158,7 @@ router.get('/', async (req, res) => {
       expenseBreakdown: expenseBreakdownResult.rows,
       budgetVsActual: budgetVsActualResult.rows,
       savingsGoals: savingsGoalsResult.rows,
+      incomeVsExpenseOverTime: incomeVsExpenseData,
     });
   } catch (error) {
     console.error('Error fetching dashboard data:', error);

@@ -23,6 +23,7 @@ app.get('/api/health', (req, res) => {
 });
 
 const authRoutes = require('./routes/auth');
+const userRoutes = require('./routes/users');
 const accountRoutes = require('./routes/accounts');
 const categoryRoutes = require('./routes/categories');
 const transactionRoutes = require('./routes/transactions');
@@ -31,6 +32,7 @@ const savingsGoalRoutes = require('./routes/savings-goals');
 const dashboardRoutes = require('./routes/dashboard');
 
 app.use('/api/auth', authRoutes);
+app.use('/api/users', userRoutes);
 app.use('/api/accounts', accountRoutes);
 app.use('/api/categories', categoryRoutes);
 app.use('/api/transactions', transactionRoutes);

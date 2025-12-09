@@ -1,6 +1,7 @@
 // Dashboard functionality
 let expenseChart = null;
 let budgetChart = null;
+let incomeExpenseChart = null;
 
 document.addEventListener('DOMContentLoaded', () => {
     // Check authentication
@@ -62,6 +63,7 @@ async function loadDashboardData() {
         updateSavingsGoals(data.savingsGoals);
         updateExpenseChart(data.expenseBreakdown);
         updateBudgetChart(data.budgetVsActual);
+        updateIncomeExpenseChart(data.incomeVsExpenseOverTime);
     } catch (error) {
         console.error('Error loading dashboard data:', error);
         showError('Failed to load dashboard data');
@@ -265,6 +267,81 @@ function updateBudgetChart(budgetVsActual) {
             plugins: {
                 legend: {
                     position: 'top',
+                },
+            },
+        },
+    });
+}
+
+function updateIncomeExpenseChart(data) {
+    const ctx = document.getElementById('incomeExpenseChart');
+    if (!ctx) return;
+
+    if (!data || data.length === 0) {
+        if (incomeExpenseChart) {
+            incomeExpenseChart.destroy();
+        }
+        ctx.parentElement.innerHTML = '<p class="empty-state">No income/expense data available</p>';
+        return;
+    }
+
+    const labels = data.map(item => {
+        const date = new Date(item.month + '-01');
+        return date.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
+    });
+    const incomeData = data.map(item => parseFloat(item.income || 0));
+    const expenseData = data.map(item => parseFloat(item.expense || 0));
+
+    if (incomeExpenseChart) {
+        incomeExpenseChart.destroy();
+    }
+
+    incomeExpenseChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: labels,
+            datasets: [
+                {
+                    label: 'Income',
+                    data: incomeData,
+                    borderColor: '#10b981',
+                    backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                    tension: 0.4,
+                    fill: true,
+                },
+                {
+                    label: 'Expenses',
+                    data: expenseData,
+                    borderColor: '#ef4444',
+                    backgroundColor: 'rgba(239, 68, 68, 0.1)',
+                    tension: 0.4,
+                    fill: true,
+                },
+            ],
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: true,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        callback: function(value) {
+                            return '$' + value.toLocaleString();
+                        },
+                    },
+                },
+            },
+            plugins: {
+                legend: {
+                    position: 'top',
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            return context.dataset.label + ': $' + context.parsed.y.toLocaleString();
+                        },
+                    },
                 },
             },
         },

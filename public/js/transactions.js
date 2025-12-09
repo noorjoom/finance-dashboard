@@ -2,6 +2,8 @@
 let editingTransactionId = null;
 let accounts = [];
 let categories = [];
+let allTransactions = [];
+let currentSort = { field: 'transaction_date', direction: 'desc' };
 
 document.addEventListener('DOMContentLoaded', () => {
     if (!requireAuth()) return;
@@ -48,6 +50,35 @@ document.addEventListener('DOMContentLoaded', () => {
     if (clearFiltersBtn) {
         clearFiltersBtn.addEventListener('click', clearFilters);
     }
+
+    // Sorting
+    const sortableHeaders = document.querySelectorAll('.sortable');
+    sortableHeaders.forEach(header => {
+        header.addEventListener('click', (e) => {
+            e.preventDefault();
+            const field = header.dataset.sort;
+            
+            // Toggle sort direction if clicking the same field
+            if (currentSort.field === field) {
+                currentSort.direction = currentSort.direction === 'asc' ? 'desc' : 'asc';
+            } else {
+                currentSort.field = field;
+                currentSort.direction = 'asc';
+            }
+            
+            // Update header indicators
+            sortableHeaders.forEach(h => {
+                if (h.dataset.sort === currentSort.field) {
+                    h.textContent = h.textContent.split(' ')[0] + (currentSort.direction === 'asc' ? ' ↑' : ' ↓');
+                } else {
+                    h.textContent = h.textContent.split(' ')[0] + ' ↕';
+                }
+            });
+            
+            sortTransactions();
+            displayTransactions(allTransactions);
+        });
+    });
 });
 
 async function loadAccounts() {
@@ -121,11 +152,52 @@ async function loadTransactions() {
     try {
         const filters = getFilters();
         const transactions = await api.getTransactions(filters);
-        displayTransactions(transactions);
+        allTransactions = transactions;
+        sortTransactions();
+        displayTransactions(allTransactions);
     } catch (error) {
         console.error('Error loading transactions:', error);
         tbody.innerHTML = '<tr><td colspan="7" class="error-message">Failed to load transactions</td></tr>';
     }
+}
+
+function sortTransactions() {
+    allTransactions.sort((a, b) => {
+        let aVal, bVal;
+        
+        switch(currentSort.field) {
+            case 'transaction_date':
+                aVal = new Date(a.transaction_date);
+                bVal = new Date(b.transaction_date);
+                break;
+            case 'amount':
+                aVal = parseFloat(a.amount || 0);
+                bVal = parseFloat(b.amount || 0);
+                break;
+            case 'description':
+                aVal = (a.description || '').toLowerCase();
+                bVal = (b.description || '').toLowerCase();
+                break;
+            case 'account_name':
+                aVal = (a.account_name || '').toLowerCase();
+                bVal = (b.account_name || '').toLowerCase();
+                break;
+            case 'category_name':
+                aVal = (a.category_name || '').toLowerCase();
+                bVal = (b.category_name || '').toLowerCase();
+                break;
+            case 'transaction_type':
+                aVal = (a.transaction_type || '').toLowerCase();
+                bVal = (b.transaction_type || '').toLowerCase();
+                break;
+            default:
+                return 0;
+        }
+        
+        if (aVal < bVal) return currentSort.direction === 'asc' ? -1 : 1;
+        if (aVal > bVal) return currentSort.direction === 'asc' ? 1 : -1;
+        return 0;
+    });
 }
 
 function getFilters() {
