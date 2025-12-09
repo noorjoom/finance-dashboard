@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Savings Goals - Finance Dashboard</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <nav class="sidebar">
+            <div class="sidebar-header">
+                <h2>Finance Dashboard</h2>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="/dashboard.html" class="nav-link">Dashboard</a></li>
+                <li><a href="/transactions.html" class="nav-link">Transactions</a></li>
+                <li><a href="/accounts.html" class="nav-link">Accounts</a></li>
+                <li><a href="/budgets.html" class="nav-link">Budgets</a></li>
+                <li><a href="/savings-goals.html" class="nav-link active">Savings Goals</a></li>
+            </ul>
+            <div class="sidebar-footer">
+                <button id="logoutBtn" class="btn btn-secondary">Logout</button>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="page-header">
+                <h1>Savings Goals</h1>
+            </header>
+
+            <!-- Add Savings Goal Form -->
+            <div class="form-container">
+                <h2 id="formTitle">Add Savings Goal</h2>
+                <form id="goalForm">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="goalName">Goal Name</label>
+                            <input type="text" id="goalName" required placeholder="e.g., Emergency Fund">
+                        </div>
+                        <div class="form-group">
+                            <label for="targetAmount">Target Amount</label>
+                            <input type="number" id="targetAmount" step="0.01" min="0" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="currentAmount">Current Amount</label>
+                            <input type="number" id="currentAmount" step="0.01" min="0" value="0.00">
+                        </div>
+                        <div class="form-group">
+                            <label for="targetDate">Target Date</label>
+                            <input type="date" id="targetDate">
+                        </div>
+                    </div>
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary" id="submitBtn">Add Goal</button>
+                        <button type="button" id="cancelBtn" class="btn btn-secondary" style="display: none;">Cancel</button>
+                    </div>
+                    <div id="goalError" class="error-message"></div>
+                </form>
+            </div>
+
+            <!-- Savings Goals List -->
+            <div class="section-card">
+                <h2>Your Savings Goals</h2>
+                <div id="goalsList" class="goals-list">
+                    <p class="loading">Loading...</p>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script src="/js/api.js"></script>
+    <script src="/js/savings-goals.js"></script>
+</body>
+</html>
+

@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transactions - Finance Dashboard</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <nav class="sidebar">
+            <div class="sidebar-header">
+                <h2>Finance Dashboard</h2>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="/dashboard.html" class="nav-link">Dashboard</a></li>
+                <li><a href="/transactions.html" class="nav-link active">Transactions</a></li>
+                <li><a href="/accounts.html" class="nav-link">Accounts</a></li>
+                <li><a href="/budgets.html" class="nav-link">Budgets</a></li>
+                <li><a href="/savings-goals.html" class="nav-link">Savings Goals</a></li>
+            </ul>
+            <div class="sidebar-footer">
+                <button id="logoutBtn" class="btn btn-secondary">Logout</button>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="page-header">
+                <h1>Transactions</h1>
+            </header>
+
+            <!-- Add Transaction Form -->
+            <div class="form-container">
+                <h2>Add Transaction</h2>
+                <form id="transactionForm">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="transactionType">Type</label>
+                            <select id="transactionType" required>
+                                <option value="">Select type</option>
+                                <option value="Income">Income</option>
+                                <option value="Expense">Expense</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="transactionAccount">Account</label>
+                            <select id="transactionAccount" required></select>
+                        </div>
+                        <div class="form-group">
+                            <label for="transactionCategory">Category</label>
+                            <select id="transactionCategory"></select>
+                        </div>
+                        <div class="form-group">
+                            <label for="transactionDate">Date</label>
+                            <input type="date" id="transactionDate" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="transactionDescription">Description</label>
+                            <input type="text" id="transactionDescription" placeholder="Enter description">
+                        </div>
+                        <div class="form-group">
+                            <label for="transactionAmount">Amount</label>
+                            <input type="number" id="transactionAmount" step="0.01" min="0" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="transactionRecurring">
+                                <input type="checkbox" id="transactionRecurring"> Recurring
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary">Add Transaction</button>
+                        <button type="button" id="cancelEditBtn" class="btn btn-secondary" style="display: none;">Cancel</button>
+                    </div>
+                    <div id="transactionError" class="error-message"></div>
+                </form>
+            </div>
+
+            <!-- Filters -->
+            <div class="section-card">
+                <h2>Filters</h2>
+                <div class="filters">
+                    <div class="filter-group">
+                        <label>Start Date</label>
+                        <input type="date" id="filterStartDate">
+                    </div>
+                    <div class="filter-group">
+                        <label>End Date</label>
+                        <input type="date" id="filterEndDate">
+                    </div>
+                    <div class="filter-group">
+                        <label>Type</label>
+                        <select id="filterType">
+                            <option value="">All</option>
+                            <option value="Income">Income</option>
+                            <option value="Expense">Expense</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label>Account</label>
+                        <select id="filterAccount">
+                            <option value="">All</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label>Category</label>
+                        <select id="filterCategory">
+                            <option value="">All</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label>&nbsp;</label>
+                        <button id="applyFiltersBtn" class="btn btn-primary btn-sm">Apply Filters</button>
+                        <button id="clearFiltersBtn" class="btn btn-secondary btn-sm">Clear</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Transactions Table -->
+            <div class="section-card">
+                <h2>Transaction History</h2>
+                <div class="table-container">
+                    <table id="transactionsTable">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Description</th>
+                                <th>Account</th>
+                                <th>Category</th>
+                                <th>Type</th>
+                                <th>Amount</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="transactionsTableBody">
+                            <tr>
+                                <td colspan="7" class="loading">Loading...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script src="/js/api.js"></script>
+    <script src="/js/transactions.js"></script>
+</body>
+</html>
+

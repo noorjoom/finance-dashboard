@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Budgets - Finance Dashboard</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <nav class="sidebar">
+            <div class="sidebar-header">
+                <h2>Finance Dashboard</h2>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="/dashboard.html" class="nav-link">Dashboard</a></li>
+                <li><a href="/transactions.html" class="nav-link">Transactions</a></li>
+                <li><a href="/accounts.html" class="nav-link">Accounts</a></li>
+                <li><a href="/budgets.html" class="nav-link active">Budgets</a></li>
+                <li><a href="/savings-goals.html" class="nav-link">Savings Goals</a></li>
+            </ul>
+            <div class="sidebar-footer">
+                <button id="logoutBtn" class="btn btn-secondary">Logout</button>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="page-header">
+                <h1>Budgets</h1>
+                <div class="header-actions">
+                    <select id="monthSelect" class="select-input">
+                        <option value="1">January</option>
+                        <option value="2">February</option>
+                        <option value="3">March</option>
+                        <option value="4">April</option>
+                        <option value="5">May</option>
+                        <option value="6">June</option>
+                        <option value="7">July</option>
+                        <option value="8">August</option>
+                        <option value="9">September</option>
+                        <option value="10">October</option>
+                        <option value="11">November</option>
+                        <option value="12">December</option>
+                    </select>
+                    <select id="yearSelect" class="select-input"></select>
+                </div>
+            </header>
+
+            <!-- Add Budget Form -->
+            <div class="form-container">
+                <h2 id="formTitle">Add Budget</h2>
+                <form id="budgetForm">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="budgetCategory">Category</label>
+                            <select id="budgetCategory" required></select>
+                        </div>
+                        <div class="form-group">
+                            <label for="budgetMonth">Month</label>
+                            <select id="budgetMonth" required></select>
+                        </div>
+                        <div class="form-group">
+                            <label for="budgetYear">Year</label>
+                            <input type="number" id="budgetYear" min="2020" max="2100" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="budgetAmount">Budget Amount</label>
+                            <input type="number" id="budgetAmount" step="0.01" min="0" required>
+                        </div>
+                    </div>
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary" id="submitBtn">Add Budget</button>
+                        <button type="button" id="cancelBtn" class="btn btn-secondary" style="display: none;">Cancel</button>
+                    </div>
+                    <div id="budgetError" class="error-message"></div>
+                </form>
+            </div>
+
+            <!-- Budget Chart -->
+            <div class="chart-card">
+                <h3>Budget vs Actual Spending</h3>
+                <canvas id="budgetChart"></canvas>
+            </div>
+
+            <!-- Budgets List -->
+            <div class="section-card">
+                <h2>Your Budgets</h2>
+                <div class="table-container">
+                    <table id="budgetsTable">
+                        <thead>
+                            <tr>
+                                <th>Category</th>
+                                <th>Month</th>
+                                <th>Year</th>
+                                <th>Budgeted</th>
+                                <th>Actual</th>
+                                <th>Remaining</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="budgetsTableBody">
+                            <tr>
+                                <td colspan="7" class="loading">Loading...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script src="/js/api.js"></script>
+    <script src="/js/budgets.js"></script>
+</body>
+</html>
+

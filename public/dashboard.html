@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Finance Dashboard</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <nav class="sidebar">
+            <div class="sidebar-header">
+                <h2>Finance Dashboard</h2>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="/dashboard.html" class="nav-link active">Dashboard</a></li>
+                <li><a href="/transactions.html" class="nav-link">Transactions</a></li>
+                <li><a href="/accounts.html" class="nav-link">Accounts</a></li>
+                <li><a href="/budgets.html" class="nav-link">Budgets</a></li>
+                <li><a href="/savings-goals.html" class="nav-link">Savings Goals</a></li>
+            </ul>
+            <div class="sidebar-footer">
+                <button id="logoutBtn" class="btn btn-secondary">Logout</button>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="page-header">
+                <h1>Dashboard</h1>
+                <div class="header-actions">
+                    <select id="monthSelect" class="select-input">
+                        <option value="1">January</option>
+                        <option value="2">February</option>
+                        <option value="3">March</option>
+                        <option value="4">April</option>
+                        <option value="5">May</option>
+                        <option value="6">June</option>
+                        <option value="7">July</option>
+                        <option value="8">August</option>
+                        <option value="9">September</option>
+                        <option value="10">October</option>
+                        <option value="11">November</option>
+                        <option value="12">December</option>
+                    </select>
+                    <select id="yearSelect" class="select-input"></select>
+                </div>
+            </header>
+
+            <!-- Summary Cards -->
+            <div class="summary-grid">
+                <div class="summary-card">
+                    <h3>Total Balance</h3>
+                    <p class="summary-value" id="totalBalance">$0.00</p>
+                </div>
+                <div class="summary-card">
+                    <h3>Net Worth</h3>
+                    <p class="summary-value" id="netWorth">$0.00</p>
+                </div>
+                <div class="summary-card">
+                    <h3>Total Income</h3>
+                    <p class="summary-value income" id="totalIncome">$0.00</p>
+                </div>
+                <div class="summary-card">
+                    <h3>Total Expenses</h3>
+                    <p class="summary-value expense" id="totalExpenses">$0.00</p>
+                </div>
+                <div class="summary-card">
+                    <h3>Savings</h3>
+                    <p class="summary-value" id="savings">$0.00</p>
+                </div>
+            </div>
+
+            <!-- Charts Row -->
+            <div class="charts-row">
+                <div class="chart-card">
+                    <h3>Expense Breakdown</h3>
+                    <canvas id="expenseChart"></canvas>
+                </div>
+                <div class="chart-card">
+                    <h3>Budget vs Actual</h3>
+                    <canvas id="budgetChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Recent Transactions -->
+            <div class="section-card">
+                <h2>Recent Transactions</h2>
+                <div id="recentTransactions" class="transactions-list">
+                    <p class="loading">Loading...</p>
+                </div>
+            </div>
+
+            <!-- Savings Goals -->
+            <div class="section-card">
+                <h2>Savings Goals</h2>
+                <div id="savingsGoals" class="goals-list">
+                    <p class="loading">Loading...</p>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script src="/js/api.js"></script>
+    <script src="/js/dashboard.js"></script>
+</body>
+</html>
+
